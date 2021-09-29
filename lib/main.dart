@@ -1,159 +1,116 @@
-/* 3-3. スイッチ */
-
 import 'package:flutter/material.dart';
 
-// void main() => runApp(MyApp());
+void main() => runApp(App());
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "My Simple App",
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Live!人工知能"),
-        ),
-        body: Center(
-          child: MyForm(),
-        ),
-      ),
-    );
-  }
-}
-
-class MyForm extends StatefulWidget {
-  @override
-  _MyFormState createState() => _MyFormState();
-}
-
-class _MyFormState extends State<MyForm> {
-  bool _active = false;
-
-  void _changeSwitch(bool e) {
-    setState(() {
-      // 状態を保持する変数を変更する処理は、setState内に記述する
-      _active = e;
-    });
-  }
-
-  Widget build(BuildContext context) {
-    return Container(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Center(
-          child: Icon(
-            Icons.thumb_up,
-            color: _active ? Colors.orange : Colors.grey,
-            size: 100.0,
-          ),
-        ),
-        Switch(
-          // スイッチ
-          value: _active,
-          onChanged: _changeSwitch,
-        )
-      ],
-    ));
-  }
-}
-
-// ------------------------------------
-
-void main() => runApp(MyApp2());
-
-class MyApp2 extends StatelessWidget {
-  const MyApp2({Key? key}) : super(key: key);
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return _MaterialApp();
-  }
+  _AppState createState() => _AppState();
 }
 
-class _MaterialApp extends StatelessWidget {
+var _routes = {
+  "/home": (BuildContext context) => HomePage(),
+  "/sub1": (BuildContext context) => Sub1(),
+  "/sub2": (BuildContext context) => Sub2(),
+};
+
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "m-app",
-      debugShowCheckedModeBanner: false,
-      home: _Scaffold(),
+      home: HomePage(),
+      routes: _routes,
     );
   }
 }
 
-class _Scaffold extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    return _BuildBody(
+      title: "HomePage",
+      nextPage: "/sub1",
+      privPage: "none",
+    );
+  }
+}
+
+class _BuildBody extends StatefulWidget {
+  const _BuildBody({Key? key, this.title, this.nextPage, this.privPage})
+      : super(key: key);
+
+  final String? title;
+  final String? nextPage;
+  final String? privPage;
+
+  @override
+  _BuildBodyState createState() => _BuildBodyState();
+}
+
+class _BuildBodyState extends State<_BuildBody> {
+  @override
+  Widget build(BuildContext context) {
+    void _toNextPage() {
+      Navigator.of(context).pushNamed(widget.nextPage!);
+    }
+
+    void _toBack() {
+      Navigator.of(context).pop();
+    }
+
     return Scaffold(
-      appBar: _AppBar(),
-      body: _Body(),
-    );
-  }
-}
-
-class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(title: Text("AppBar"));
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(100);
-}
-
-class _Body extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        color: Colors.white,
-        height: 300.0,
-        width: 300.0,
-        child: _ThumbUp(),
+      appBar: AppBar(
+        title: Text(widget.title!),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Text(widget.title!),
+            MaterialButton(
+              onPressed: _toNextPage,
+              child: Text(widget.nextPage!),
+            ),
+            OutlinedButton(onPressed: _toBack, child: Text(widget.privPage!)),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _ThumbUp extends StatefulWidget {
-  _ThumbUpState createState() => _ThumbUpState();
+class Sub1 extends StatefulWidget {
+  const Sub1({Key? key}) : super(key: key);
+
+  @override
+  _Sub1State createState() => _Sub1State();
 }
 
-class _ThumbUpState extends State<_ThumbUp> {
-  bool _isActive = false;
-
-  Widget _icon() {
-    return Icon(
-      Icons.thumb_up,
-      color: _isActive ? Colors.orange : Colors.grey,
-      size: 100,
-    );
-  }
-
-  Widget _switch() {
-    void _onChanged(bool e) {
-      setState(() {
-        print("e: $e");
-        _isActive = e;
-      });
-    }
-
-    return Switch(
-      value: _isActive,
-      onChanged: _onChanged,
-      // onChanged: (bool e) {
-      //   setState(() {
-      //     print("e: $e");
-      //     isActive = !isActive;
-      //   });
-      // });
-    );
-  }
-
+class _Sub1State extends State<Sub1> {
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[_icon(), _switch()],
-    );
+    return _BuildBody(title: "Sub1", nextPage: "/sub2", privPage: "/home");
+  }
+}
+
+class Sub2 extends StatefulWidget {
+  const Sub2({Key? key}) : super(key: key);
+
+  @override
+  _Sub2State createState() => _Sub2State();
+}
+
+class _Sub2State extends State<Sub2> {
+  @override
+  Widget build(BuildContext context) {
+    return _BuildBody(title: "Sub2", nextPage: "/home", privPage: "/sub1");
   }
 }

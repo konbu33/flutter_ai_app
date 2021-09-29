@@ -1,6 +1,6 @@
 {
-    "name": "hello_app",
-    "short_name": "hello_app",
+    "name": "flutter_ai_app",
+    "short_name": "flutter_ai_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

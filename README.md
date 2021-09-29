@@ -1,4 +1,4 @@
-# hello_app
+# flutter_ai_app
 
 A new Flutter project.
 
