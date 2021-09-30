@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'DrawerPage.dart';
+import 'aspect.dart';
 
-void main() => runApp(App());
+void main() => runApp(MyApp());
 
-class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  _AppState createState() => _AppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 var _routes = {
   "/home": (BuildContext context) => HomePage(),
   "/sub1": (BuildContext context) => Sub1(),
   "/sub2": (BuildContext context) => Sub2(),
+  "/drawerpage": (BuildContext context) => DrawerPage(),
+  "/aspect": (BuildContext context) => Aspect(),
 };
 
-class _AppState extends State<App> {
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -67,6 +71,14 @@ class _BuildBodyState extends State<_BuildBody> {
       Navigator.of(context).pop();
     }
 
+    void _toDrawerPage() {
+      Navigator.pushNamed(context, "/drawerpage");
+    }
+
+    void _toAspect() {
+      Navigator.of(context).pushNamed('/aspect');
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title!),
@@ -80,6 +92,8 @@ class _BuildBodyState extends State<_BuildBody> {
               child: Text(widget.nextPage!),
             ),
             OutlinedButton(onPressed: _toBack, child: Text(widget.privPage!)),
+            TextButton(onPressed: _toDrawerPage, child: Text("to DrawerPage")),
+            FloatingActionButton(onPressed: _toAspect, child: Text("to aspect"))
           ],
         ),
       ),
